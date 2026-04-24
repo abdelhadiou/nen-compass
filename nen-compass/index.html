@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Greed Island: The Nen Compass</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="game-container">
+
+    <!-- ── Header / Affinity selector ── -->
+    <header>
+      <h1>⚡ NEN COMPASS TRIAL ⚡</h1>
+      <p class="subtitle">Greed Island — Challenge 02</p>
+      <div id="affinity-selector">
+        <label for="affinity">Choose Your Nen Aura:</label>
+        <select id="affinity">
+          <option value="Enhancer">💪 Enhancer</option>
+          <option value="Transmuter">⚡ Transmuter</option>
+          <option value="Conjurer">🔮 Conjurer</option>
+          <option value="Manipulator">🎭 Manipulator</option>
+          <option value="Emitter">🌊 Emitter</option>
+          <option value="Specialist">✨ Specialist</option>
+        </select>
+        <button id="start-btn">Enter Labyrinth</button>
+      </div>
+      <div id="pre-game-stats">
+        <div class="pgs-card">
+          <div class="pgs-icon">🗺️</div>
+          <div class="pgs-label">Maze Size</div>
+          <div class="pgs-value">20 × 20</div>
+        </div>
+        <div class="pgs-card">
+          <div class="pgs-icon">👁️</div>
+          <div class="pgs-label">Fog Radius</div>
+          <div class="pgs-value">2 cells</div>
+        </div>
+        <div class="pgs-card">
+          <div class="pgs-icon">⏱️</div>
+          <div class="pgs-label">Hunter Speed</div>
+          <div class="pgs-value">1 step / sec</div>
+        </div>
+        <div class="pgs-card" id="pgs-same">
+          <div class="pgs-icon">✅</div>
+          <div class="pgs-label">Same-type cost</div>
+          <div class="pgs-value" id="pgs-same-val">—</div>
+        </div>
+        <div class="pgs-card" id="pgs-best">
+          <div class="pgs-icon">⚡</div>
+          <div class="pgs-label">Best room type</div>
+          <div class="pgs-value" id="pgs-best-val">—</div>
+        </div>
+        <div class="pgs-card" id="pgs-worst">
+          <div class="pgs-icon">🐢</div>
+          <div class="pgs-label">Worst room type</div>
+          <div class="pgs-value" id="pgs-worst-val">—</div>
+        </div>
+        <div class="pgs-card" id="pgs-hunter">
+          <div class="pgs-icon">👹</div>
+          <div class="pgs-label">vs Hunter (Emitter)</div>
+          <div class="pgs-value" id="pgs-hunter-val">—</div>
+        </div>
+        <div class="pgs-card" id="pgs-avg">
+          <div class="pgs-icon">📊</div>
+          <div class="pgs-label">Avg move cost</div>
+          <div class="pgs-value" id="pgs-avg-val">—</div>
+        </div>
+        <div class="pgs-card">
+          <div class="pgs-icon">🕹️</div>
+          <div class="pgs-label">Controls</div>
+          <div class="pgs-value">Click or WASD</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── Game UI (hidden until start) ── -->
+    <div class="main-content hidden" id="game-ui">
+
+      <!-- Left sidebar -->
+      <div class="sidebar">
+
+        <!-- Compass panel -->
+        <div class="panel" id="compass-panel">
+          <h3>Nen Compass</h3>
+          <canvas id="compass-canvas" width="110" height="110"
+            style="display:block;margin:6px auto;"></canvas>
+          <div id="compass-direction">--</div>
+          <div id="compass-distance">Distance: --</div>
+        </div>
+
+        <!-- Stats panel -->
+        <div class="panel" id="stats-panel">
+          <h3>Hunter Stats</h3>
+          <div class="stat-row">
+            <span class="stat-label">Moves</span>
+            <span class="stat-value" id="stat-moves">0</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Current Room</span>
+            <span class="stat-value" id="stat-nen">—</span>
+          </div>
+          <div class="stat-row">
+            <span class="stat-label">Hunter Dist</span>
+            <span class="stat-value" id="stat-hunter">—</span>
+          </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="panel" id="legend-panel">
+          <h3>Legend</h3>
+          <div class="legend-row"><span class="dot cyan"></span> You</div>
+          <div class="legend-row"><span class="dot red"></span> Shadow Hunter</div>
+          <div class="legend-row"><span class="dot gold">★</span> Center</div>
+          <div class="legend-row"><span class="dot cyan-faint">░</span> Suggested Path</div>
+          <hr class="panel-hr"/>
+          <div class="nen-legend">
+            <div><span style="color:#ff4d4d">■</span> Enhancer</div>
+            <div><span style="color:#cc33ff">■</span> Transmuter</div>
+            <div><span style="color:#ffcc00">■</span> Conjurer</div>
+            <div><span style="color:#99ccff">■</span> Manipulator</div>
+            <div><span style="color:#33cc33">■</span> Emitter</div>
+            <div><span style="color:#ffffff">■</span> Specialist</div>
+          </div>
+          <hr class="panel-hr"/>
+          <p class="hint">Click adjacent cells to move. Reach ★ before the red dot!</p>
+        </div>
+
+      </div>
+
+      <!-- Canvas -->
+      <div class="canvas-wrapper">
+        <canvas id="gridCanvas" width="600" height="600"></canvas>
+      </div>
+
+    </div><!-- /game-ui -->
+
+    <!-- ── Game Over Modal ── -->
+    <div id="game-modal" class="modal-overlay hidden">
+      <div class="modal-box">
+        <div id="modal-title" class="modal-title">--</div>
+        <p id="modal-msg" class="modal-msg">--</p>
+        <button id="restart-btn" class="restart-btn">↺ Play Again</button>
+      </div>
+    </div>
+
+  </div><!-- /game-container -->
+
+  <!-- ── Scripts: order matters ── -->
+  <!-- 1. Algorithms (no DOM deps) -->
+  <script src="algorithm/fogOfWar.js"></script>
+  <!-- 2. Components (may use algorithm classes) -->
+  <script src="components/GridCanvas.js"></script>
+  <script src="components/CompassUI.js"></script>
+  <script src="components/AffinitySelector.js"></script>
+  <!-- 3. Main entry point (uses everything above) -->
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+/* ─── Reset & CSS Variables ───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-dark:       #0d1117;
+  --bg-panel:      #161b22;
+  --gi-green:      #2ea043;
+  --gi-green-glow: #3fb950;
+  --gold:          #d2a849;
+  --gold-glow:     #f0c060;
+  --text-light:    #c9d1d9;
+  --text-dim:      #8b949e;
+  --red:           #ff3333;
+  --cyan:          #00ffff;
+}
+
+/* ─── Base ────────────────────────────────────────────────────────────── */
+body {
+  background: var(--bg-dark);
+  color: var(--text-light);
+  font-family: 'Courier New', Courier, monospace;
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.game-container {
+  width: 100%;
+  max-width: 920px;
+  position: relative;
+}
+
+/* ─── Header ──────────────────────────────────────────────────────────── */
+header {
+  text-align: center;
+  border-bottom: 2px solid var(--gi-green);
+  padding-bottom: 16px;
+  margin-bottom: 18px;
+}
+
+h1 {
+  color: var(--gi-green-glow);
+  text-shadow: 0 0 14px var(--gi-green);
+  letter-spacing: 3px;
+  font-size: 1.6rem;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  margin-bottom: 14px;
+}
+
+#affinity-selector {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+#affinity-selector label {
+  color: var(--gold);
+  font-size: 0.9rem;
+}
+
+/* ─── Form controls ───────────────────────────────────────────────────── */
+select, button {
+  background: var(--bg-dark);
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  padding: 8px 18px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.25s ease;
+}
+
+select:focus { outline: none; border-color: var(--gold-glow); }
+
+button:hover {
+  background: var(--gold);
+  color: var(--bg-dark);
+  box-shadow: 0 0 16px var(--gold);
+}
+
+/* ─── Game Layout ─────────────────────────────────────────────────────── */
+.main-content {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.hidden { display: none !important; }
+
+/* ─── Sidebar ─────────────────────────────────────────────────────────── */
+.sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--gi-green);
+  border-radius: 8px;
+  padding: 12px 14px;
+  box-shadow: 0 0 10px rgba(46,160,67,0.15);
+}
+
+.panel h3 {
+  color: var(--gold);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  border-bottom: 1px dashed var(--gold);
+  padding-bottom: 6px;
+  margin-bottom: 10px;
+}
+
+/* ─── Compass Panel ───────────────────────────────────────────────────── */
+#compass-direction {
+  font-size: 2rem;
+  text-align: center;
+  color: var(--gi-green-glow);
+  font-weight: bold;
+  text-shadow: 0 0 12px var(--gi-green);
+  letter-spacing: 3px;
+  margin: 4px 0;
+}
+
+#compass-distance {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.78rem;
+}
+
+/* ─── Stats Panel ─────────────────────────────────────────────────────── */
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 6px;
+  font-size: 0.78rem;
+}
+
+.stat-label { color: var(--text-dim); }
+.stat-value { color: var(--gi-green-glow); font-weight: bold; text-align: right; }
+
+/* ─── Legend Panel ────────────────────────────────────────────────────── */
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+  font-size: 0.78rem;
+  color: var(--text-light);
+}
+
+.dot {
+  display: inline-block;
+  width: 14px;
+  text-align: center;
+  font-weight: bold;
+}
+.dot.cyan  { color: var(--cyan); }
+.dot.red   { color: var(--red); }
+.dot.gold  { color: var(--gold); }
+.dot.cyan-faint { color: rgba(0,255,255,0.35); }
+
+.panel-hr {
+  border: none;
+  border-top: 1px dashed #333;
+  margin: 8px 0;
+}
+
+.nen-legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px 8px;
+  font-size: 0.72rem;
+  margin-bottom: 6px;
+}
+
+.hint {
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+/* ─── Canvas ──────────────────────────────────────────────────────────── */
+.canvas-wrapper {
+  border: 2px solid var(--gold);
+  border-radius: 4px;
+  box-shadow: 0 0 24px rgba(210,168,73,0.25);
+  background: #000;
+  flex-shrink: 0;
+  line-height: 0; /* remove gap under canvas */
+}
+
+#gridCanvas {
+  display: block;
+  width: 600px;
+  height: 600px;
+  cursor: pointer;
+  image-rendering: pixelated;
+}
+
+/* ─── Game Over Modal ─────────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-box {
+  background: var(--bg-panel);
+  border: 2px solid var(--gold);
+  border-radius: 12px;
+  padding: 40px 48px;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(210,168,73,0.4);
+  max-width: 420px;
+  width: 90%;
+}
+
+.modal-title {
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 3px;
+  margin-bottom: 14px;
+  text-shadow: 0 0 14px currentColor;
+}
+
+.modal-msg {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 24px;
+}
+
+.restart-btn {
+  background: transparent;
+  color: var(--gold);
+  border: 2px solid var(--gold);
+  padding: 10px 30px;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  letter-spacing: 2px;
+  border-radius: 6px;
+  transition: all 0.3s;
+}
+
+.restart-btn:hover {
+  background: var(--gold);
+  color: var(--bg-dark);
+  box-shadow: 0 0 20px var(--gold);
+}
+/* ─── Pre-game stats grid ─────────────────────────────────────────────── */
+#pre-game-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 28px;
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.pgs-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--gi-green);
+  border-radius: 8px;
+  padding: 16px 10px;
+  text-align: center;
+  box-shadow: 0 0 8px rgba(46,160,67,0.15);
+  transition: box-shadow 0.2s;
+}
+
+.pgs-card:hover { box-shadow: 0 0 16px rgba(46,160,67,0.4); }
+
+.pgs-icon  { font-size: 1.6rem; margin-bottom: 6px; }
+.pgs-label { color: var(--text-dim); font-size: 0.72rem; letter-spacing: 1px; margin-bottom: 4px; }
+.pgs-value { color: var(--gold); font-size: 0.9rem; font-weight: bold; }
+
+.pgs-card.highlight { border-color: var(--gold); box-shadow: 0 0 16px rgba(210,168,73,0.35); }
